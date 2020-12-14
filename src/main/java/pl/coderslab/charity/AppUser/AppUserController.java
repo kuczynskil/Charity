@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import pl.coderslab.charity.Email.EmailService;
 
 import javax.validation.Valid;
 import java.util.Collections;
@@ -19,15 +20,18 @@ public class AppUserController {
     private final AppUserRepository appUserRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
-    public AppUserController(AppUserRepository appUserRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public AppUserController(AppUserRepository appUserRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
         this.appUserRepository = appUserRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @GetMapping("/login")
     public String login() {
+        emailService.sendEmail();
         return "login";
     }
 
