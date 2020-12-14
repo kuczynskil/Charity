@@ -19,9 +19,11 @@ public class EmailService {
         javaMailSender.send(mailMessage);
     }
 
-    public void sendEmailToActivateNewAccount(String email) {
-        SimpleMailMessage mailMessage = mailMessageConfiguration(email, "testSubject", "tesing " +
-                "the ablility to send emails");
+    public void sendEmailToActivateNewAccount(String email, String token) {
+        SimpleMailMessage mailMessage = mailMessageConfiguration(email, "Oddam w niechciane ręce - aktywacja konta",
+                "<p> Dziękujemy za rejestrację w serwisie 'Oddam w niechciane ręce'</p>"
+        + "<p> Kliknij poniższy link aby dokończyć rejestrację i zweryfikować swoje konto</p>"
+        + "<a href ='http://localhost:8080/verify?token" + token + "'>Weryfikacja</a>");
         javaMailSender.send(mailMessage);
     }
 

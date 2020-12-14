@@ -31,7 +31,6 @@ public class AppUserController {
 
     @GetMapping("/login")
     public String login() {
-        emailService.sendEmail();
         return "login";
     }
 
@@ -54,6 +53,18 @@ public class AppUserController {
         }
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         appUser.setRoles(new HashSet<>(Collections.singletonList(roleRepository.findByName("ROLE_USER"))));
+        emailService.sendEmailToActivateNewAccount(appUser.getEmail(), appUser.getVerificationToken());
+        appUserRepository.save(appUser);
+        return "index";
+    }
+
+    @GetMapping("/verify")
+    public String verifyAppUser(@RequestParam String token) {
+        AppUser appUser = appUserRepository.findByVerificationToken(token);
+        if (appUser == null || appUser.isEnabled()) {
+            return "login";
+        }
+        appUser.setEnabled(true);
         appUserRepository.save(appUser);
         return "index";
     }
