@@ -10,9 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.coderslab.charity.Email.EmailService;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.UUID;
 
 @Controller
 public class AppUserController {
@@ -42,7 +46,7 @@ public class AppUserController {
 
     @PostMapping("/register")
     public String registerPerform(@Valid AppUser appUser, BindingResult result, Model model,
-                                  @RequestParam String password2) {
+                                  @RequestParam String password2) throws MessagingException {
 
         if (!appUser.getPassword().equals(password2)) {
             result.addError(new FieldError("appuser", "password2", "Hasła są różne"));
@@ -53,6 +57,9 @@ public class AppUserController {
         }
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         appUser.setRoles(new HashSet<>(Collections.singletonList(roleRepository.findByName("ROLE_USER"))));
+        appUser.setVerificationToken(UUID.randomUUID().toString());
+        //expiry date set to 24 hours
+        appUser.setVerificationTokenExpiryDate(calculateVerificationTokenExpiryDate(25 * 60));
         emailService.sendEmailToActivateNewAccount(appUser.getEmail(), appUser.getVerificationToken());
         appUserRepository.save(appUser);
         return "index";
@@ -63,9 +70,17 @@ public class AppUserController {
         AppUser appUser = appUserRepository.findByVerificationToken(token);
         if (appUser == null || appUser.isEnabled()) {
             return "login";
+        } else if (appUser.getVerificationTokenExpiryDate().before(new Timestamp(System.currentTimeMillis()))) {
+            return "form-confirmation";
         }
         appUser.setEnabled(true);
         appUserRepository.save(appUser);
         return "index";
+    }
+
+    private Timestamp calculateVerificationTokenExpiryDate(int expiryTimeInMinutes) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
+        return new Timestamp(calendar.getTime().getTime());
     }
 }

@@ -2,10 +2,10 @@ package pl.coderslab.charity.AppUser;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
@@ -27,9 +27,9 @@ public class AppUser {
     private String password;
     private boolean enabled;
     private String verificationToken;
+    private Timestamp verificationTokenExpiryDate;
 
     public AppUser() {
         this.setEnabled(false);
-        this.setVerificationToken("abecadlo");
     }
 }
