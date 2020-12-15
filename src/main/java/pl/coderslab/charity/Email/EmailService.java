@@ -17,9 +17,12 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendEmail() throws MessagingException {
-        MimeMessage mailMessage = mailMessageConfiguration("l.kuczynski95@gmail.com", "testSubject", "tesing " +
-                "the ablility to send emails");
+    public void sendEmailToChangeForgottenPassword(String email, String token) throws MessagingException {
+        MimeMessage mailMessage = mailMessageConfiguration(email, "Oddam w niechciane ręce - reset hasła",
+                "<p style = \"font-size: 20px\"> Dzień dobry, </p>" +
+                        "<p> w celu zresetowania i ustawienia nowego hasła w serwisie \"Oddam w niechciane " +
+                        "ręce\" proszę nacisnąć w poniższy link:</p>"
+                        + "<a href ='http://localhost:8080/resetPassword?token=" + token + "'>Reset hasła</a>");
         javaMailSender.send(mailMessage);
     }
 

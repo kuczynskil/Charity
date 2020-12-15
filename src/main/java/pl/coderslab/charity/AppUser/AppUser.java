@@ -29,6 +29,9 @@ public class AppUser {
     private String verificationToken;
     private Timestamp verificationTokenExpiryDate;
 
+    private String changePasswordToken;
+    private Timestamp changePasswordTokenExpiryDate;
+
     public AppUser() {
         this.setEnabled(false);
     }
