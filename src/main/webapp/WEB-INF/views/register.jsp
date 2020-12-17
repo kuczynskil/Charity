@@ -8,6 +8,10 @@
     <h2>Załóż konto</h2>
     <form:form method="post" modelAttribute="appuser">
         <div class="form-group">
+            <form:input path="name" placeholder="Imię"/><br>
+            <form:errors path="name"/>
+        </div>
+        <div class="form-group">
             <form:input path="email" type="email" placeholder="Email"/><br>
             <form:errors path="email"/>
         </div>

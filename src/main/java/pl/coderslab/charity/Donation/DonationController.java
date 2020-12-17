@@ -34,6 +34,8 @@ public class DonationController {
     @GetMapping("/donate")
     public String setNewDonation(Model model) {
         model.addAttribute("donation", new Donation());
+        model.addAttribute("appuser", ((CurrentUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUser());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("organizations", organizationRepository.findAll());
         return "form";
@@ -42,6 +44,8 @@ public class DonationController {
     @PostMapping("/donate")
     public String newDonationSummary(@Valid Donation donation, BindingResult result, Model model) {
         model.addAttribute("donation", donation);
+        model.addAttribute("appuser", ((CurrentUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUser());
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("organizations", organizationRepository.findAll());
@@ -54,7 +58,7 @@ public class DonationController {
 
 
     @PostMapping("/donateAdd")
-    public String addDonation(Donation donation) throws MessagingException {
+    public String addDonation(Donation donation, Model model) throws MessagingException {
         donation.setAppUser(((CurrentUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser());
         donationRepository.save(donation);
@@ -75,6 +79,8 @@ public class DonationController {
                 "   <li>" + donation.getPickUpComment() + "</li>\n" +
                 "</ul>");
         emailService.sendEmailWithDonationDetails(donation.getAppUser().getEmail(), sb.toString());
+        model.addAttribute("appuser", ((CurrentUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUser());
         return "form-confirmation";
     }
 
@@ -82,7 +88,7 @@ public class DonationController {
         StringBuilder sb = new StringBuilder();
         List<Category> categoryList = donation.getCategories();
         if (categoryList.size() == 1) {
-            sb.append(categoryList.get(0));
+            sb.append(categoryList.get(0).getName());
         } else if (categoryList.size() > 1) {
             for (int i = 0; i < categoryList.size() - 2; i++) {
                 sb.append(categoryList.get(i).getName()).append(", ");

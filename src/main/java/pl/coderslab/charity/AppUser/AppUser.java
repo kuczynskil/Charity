@@ -34,6 +34,8 @@ public class AppUser {
     @Size(min = 8)
     private String password;
 
+    @NotBlank
+    private String name;
     private boolean enabled;
     private String verificationToken;
     private Timestamp verificationTokenExpiryDate;
