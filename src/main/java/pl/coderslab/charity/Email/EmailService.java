@@ -34,6 +34,14 @@ public class EmailService {
         javaMailSender.send(mailMessage);
     }
 
+
+    public void sendEmailWithDonationDetails(String email, String donationDetails) throws MessagingException {
+        MimeMessage mailMessage = mailMessageConfiguration(email, "Oddam w niechciane ręce - Twoja darowizna",
+                "<p> Bardzo dziękujemy za darowiznę. </p>"
+                        + "<p> Szczegóły Twojej darowizny:</p>"
+                        + donationDetails);
+        javaMailSender.send(mailMessage);
+    }
     public MimeMessage mailMessageConfiguration(String recipientsEmail, String subject, String text) throws MessagingException {
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mailMessage, "utf-8");

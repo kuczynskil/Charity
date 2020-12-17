@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -23,8 +26,14 @@ public class AppUser {
     private Set<Role> roles;
 
     @Email
+    @NotBlank
+    @Column(unique = true)
     private String email;
+
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{3,}$")
+    @Size(min = 8)
     private String password;
+
     private boolean enabled;
     private String verificationToken;
     private Timestamp verificationTokenExpiryDate;

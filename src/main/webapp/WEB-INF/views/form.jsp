@@ -4,11 +4,11 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>Document</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
 </head>
 <body>
 <header class="header--form-page">
@@ -33,32 +33,32 @@
         </ul>
     </nav>
 
-<div class="slogan container container--90">
-    <div class="slogan--item">
-        <h1>
-            Oddaj rzeczy, których już nie chcesz<br/>
-            <span class="uppercase">potrzebującym</span>
-        </h1>
+    <div class="slogan container container--90">
+        <div class="slogan--item">
+            <h1>
+                Oddaj rzeczy, których już nie chcesz<br/>
+                <span class="uppercase">potrzebującym</span>
+            </h1>
 
-        <div class="slogan--steps">
-            <div class="slogan--steps-title">Wystarczą 4 proste kroki:</div>
-            <ul class="slogan--steps-boxes">
-                <li>
-                    <div><em>1</em><span>Wybierz rzeczy</span></div>
-                </li>
-                <li>
-                    <div><em>2</em><span>Spakuj je w worki</span></div>
-                </li>
-                <li>
-                    <div><em>3</em><span>Wybierz fundację</span></div>
-                </li>
-                <li>
-                    <div><em>4</em><span>Zamów kuriera</span></div>
-                </li>
-            </ul>
+            <div class="slogan--steps">
+                <div class="slogan--steps-title">Wystarczą 4 proste kroki:</div>
+                <ul class="slogan--steps-boxes">
+                    <li>
+                        <div><em>1</em><span>Wybierz rzeczy</span></div>
+                    </li>
+                    <li>
+                        <div><em>2</em><span>Spakuj je w worki</span></div>
+                    </li>
+                    <li>
+                        <div><em>3</em><span>Wybierz fundację</span></div>
+                    </li>
+                    <li>
+                        <div><em>4</em><span>Zamów kuriera</span></div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 </header>
 
 <section class="form--steps">
@@ -156,19 +156,27 @@
                     <div class="form-section--column">
                         <h4>Adres odbioru</h4>
                         <div class="form-group form-group--inline">
-                            <label>Ulica <form:input path="street"/></label>
+                            <label>Ulica i nr
+                                <form:input path="street"/></label>
+                            <label style="color:red;"><form:errors path="street"/></label>
                         </div>
 
                         <div class="form-group form-group--inline">
                             <label>Miasto <form:input path="city"/></label>
+                            <label style="color:red;"><form:errors path="city"/></label>
+
                         </div>
 
                         <div class="form-group form-group--inline">
                             <label>Kod pocztowy<form:input path="zipCode"/></label>
+                            <label style="color:red;"><form:errors path="zipCode"/></label>
+
                         </div>
 
                         <div class="form-group form-group--inline">
                             <label>Numer telefonu <form:input path="telephoneNumber" type="tel"/></label>
+                            <label style="color:red;"><form:errors path="telephoneNumber"/></label>
+
                         </div>
                     </div>
 
@@ -176,21 +184,25 @@
                         <h4>Termin odbioru</h4>
                         <div class="form-group form-group--inline">
                             <label> Data <form:input path="pickUpDate" type="date"/></label>
+                            <label style="color:red;"><form:errors path="pickUpDate"/></label>
+
                         </div>
 
                         <div class="form-group form-group--inline">
                             <label> Godzina <form:input path="pickUpTime" type="time"/></label>
+                            <label style="color:red;"><form:errors path="pickUpTime"/></label>
+
                         </div>
 
                         <div class="form-group form-group--inline">
                             <label> Uwagi dla kuriera <form:textarea path="pickUpComment" rows="5"/> </label>
+                            <label style="color:red;"><form:errors path="pickUpComment"/></label>
+
                         </div>
                     </div>
                 </div>
                 <div class="form-group form-group--buttons" style="justify-content: space-between">
                     <button type="button" class="btn prev-step">Wstecz</button>
-                    <button type="button" class="btn next-step">Dalej</button>
-
                     <input type="submit" class="btn" value="Zatwierdź">
                 </div>
             </div>

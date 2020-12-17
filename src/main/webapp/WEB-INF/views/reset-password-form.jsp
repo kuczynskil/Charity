@@ -6,13 +6,10 @@
 
 <section class="login-page">
     <h2>Zmień hasło do konta</h2>
-    <form action="${pageContext.request.contextPath}/resetPassword" method="post">
+    <form:form method="post" modelAttribute="appuser">
         <div class="form-group">
-<%--            <form:input path="password" type="password" placeholder="Nowe hasło"/><br>--%>
-<%--            <form:errors path="password"/>--%>
-            <label>
-                <input type="password" name="password" placeholder="Nowe hasło"/><br>
-            </label>
+            <form:input path="password" type="password" placeholder="Nowe hasło"/><br>
+            <form:errors path="password"/>
         </div>
         <div class="form-group">
             <label>
@@ -20,13 +17,12 @@
             </label>
             <div style="color: red; font-size: 20px">${diffpasswordsMessage}</div>
         </div>
-
         <div class="form-group form-group--buttons">
             <button class="btn" type="submit">Zmień hasło</button>
         </div>
-        <input name="email" type="hidden" value="${appuser.email}"/>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    </form>
+        <form:input name="email" type="hidden" path="email"/>
+        <form:input path="id" type="hidden"/>
+    </form:form>
 </section>
 
 <%@include file="/WEB-INF/views/includes/footer.jsp" %>

@@ -46,7 +46,11 @@ public class AppUserController {
     public String registerPerform(@Valid AppUser appUser, BindingResult result, Model model,
                                   @RequestParam String password2) throws MessagingException {
 
-        if (result.hasErrors() || !appUser.getPassword().equals(password2)) {
+        if (result.hasErrors()) {
+            model.addAttribute("appuser", appUser);
+            return "register";
+        }
+        if (!appUser.getPassword().equals(password2)) {
             model.addAttribute("appuser", appUser);
             model.addAttribute("diffpasswordsMessage", "Hasła są różne");
             return "register";
@@ -112,18 +116,14 @@ public class AppUserController {
     }
 
     @PostMapping("/resetPassword")
-    public String settingNewPassword(Model model,
-                                     @RequestParam String password, @RequestParam String email) {
-        AppUser appUser = appUserRepository.findByEmail(email);
-//        if (!appUser.getPassword().equals(password2)) {
-//            model.addAttribute("appuser", appUser);
-//            model.addAttribute("diffpasswordsMessage", "Hasła są różne");
-//            return "reset-password-form";
-//        }
-        System.out.println(password);
-        System.out.println(email);
-        System.out.println(appUser.getEmail());
-        appUser.setPassword(passwordEncoder.encode(password));
+    public String settingNewPassword(@Valid AppUser appUser, Model model, BindingResult result,
+                                     @RequestParam String password2) {
+        if (result.hasErrors() || !appUser.getPassword().equals(password2)) {
+            model.addAttribute("appuser", appUser);
+            model.addAttribute("diffpasswordsMessage", "Hasła są różne");
+            return "register";
+        }
+        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         appUserRepository.save(appUser);
         return "redirect:/login";
     }
