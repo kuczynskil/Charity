@@ -19,7 +19,10 @@
                 <ul class="dropdown">
                     <li><a href="/user/profile">Profil</a></li>
                     <li><a href="/user/home">Moje zbiórki</a></li>
-                    <li><a href="/logout">Wyloguj</a></li>
+                    <li><form class="nav-link" action="<c:url value="/logout"/>" method="post">
+                        <input class="nav-link" type="submit" value="Wyloguj">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    </form></li>
                 </ul>
             </li>
         </ul>
