@@ -1,4 +1,4 @@
-package pl.coderslab.charity.Donation;
+package pl.coderslab.charity.donation;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -6,11 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import pl.coderslab.charity.AppUser.CurrentUser;
-import pl.coderslab.charity.Category.Category;
-import pl.coderslab.charity.Category.CategoryRepository;
-import pl.coderslab.charity.Email.EmailService;
-import pl.coderslab.charity.Organization.OrganizationRepository;
+import pl.coderslab.charity.appuser.CurrentUser;
+import pl.coderslab.charity.category.Category;
+import pl.coderslab.charity.category.CategoryRepository;
+import pl.coderslab.charity.email.EmailService;
+import pl.coderslab.charity.organization.OrganizationRepository;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -23,6 +23,7 @@ public class DonationController {
     private final OrganizationRepository organizationRepository;
     private final DonationRepository donationRepository;
     private final EmailService emailService;
+    private static final String APP_USER = "appuser";
 
     public DonationController(CategoryRepository categoryRepository, OrganizationRepository organizationRepository, DonationRepository donationRepository, EmailService emailService) {
         this.categoryRepository = categoryRepository;
@@ -34,7 +35,7 @@ public class DonationController {
     @GetMapping("/donate")
     public String setNewDonation(Model model) {
         model.addAttribute("donation", new Donation());
-        model.addAttribute("appuser", ((CurrentUser) SecurityContextHolder.getContext()
+        model.addAttribute(APP_USER, ((CurrentUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("organizations", organizationRepository.findAll());
@@ -44,7 +45,7 @@ public class DonationController {
     @PostMapping("/donate")
     public String newDonationSummary(@Valid Donation donation, BindingResult result, Model model) {
         model.addAttribute("donation", donation);
-        model.addAttribute("appuser", ((CurrentUser) SecurityContextHolder.getContext()
+        model.addAttribute(APP_USER, ((CurrentUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser());
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryRepository.findAll());
@@ -79,7 +80,7 @@ public class DonationController {
                 "   <li>" + donation.getPickUpComment() + "</li>\n" +
                 "</ul>");
         emailService.sendEmailWithDonationDetails(donation.getAppUser().getEmail(), sb.toString());
-        model.addAttribute("appuser", ((CurrentUser) SecurityContextHolder.getContext()
+        model.addAttribute(APP_USER, ((CurrentUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser());
         return "form-confirmation";
     }

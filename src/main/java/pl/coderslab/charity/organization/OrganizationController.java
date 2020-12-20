@@ -1,4 +1,4 @@
-package pl.coderslab.charity.Organization;
+package pl.coderslab.charity.organization;
 
 import org.springframework.stereotype.Controller;
 

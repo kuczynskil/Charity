@@ -1,12 +1,12 @@
-package pl.coderslab.charity.Donation;
+package pl.coderslab.charity.donation;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
-import pl.coderslab.charity.AppUser.AppUser;
-import pl.coderslab.charity.Category.Category;
-import pl.coderslab.charity.Organization.Organization;
+import pl.coderslab.charity.appuser.AppUser;
+import pl.coderslab.charity.category.Category;
+import pl.coderslab.charity.organization.Organization;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

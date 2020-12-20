@@ -1,4 +1,4 @@
-package pl.coderslab.charity.AppUser;
+package pl.coderslab.charity.appuser;
 
 import lombok.Getter;
 import lombok.Setter;

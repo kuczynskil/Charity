@@ -23,7 +23,6 @@
             <label>
                 <input type="password" name="password2" placeholder="Powtórz hasło"/><br>
             </label>
-            <div style="color: red; font-size: 20px">${diffpasswordsMessage}</div>
         </div>
 
         <div class="form-group form-group--buttons">

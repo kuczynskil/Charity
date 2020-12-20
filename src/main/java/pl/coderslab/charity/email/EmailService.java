@@ -1,6 +1,5 @@
-package pl.coderslab.charity.Email;
+package pl.coderslab.charity.email;
 
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;

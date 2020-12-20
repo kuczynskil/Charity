@@ -1,4 +1,4 @@
-package pl.coderslab.charity.AppUser;
+package pl.coderslab.charity.appuser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

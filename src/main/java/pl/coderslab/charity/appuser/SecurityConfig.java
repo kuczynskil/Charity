@@ -1,4 +1,4 @@
-package pl.coderslab.charity.AppUser;
+package pl.coderslab.charity.appuser;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/donate/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and().formLogin().loginPage("/login")
-                .defaultSuccessUrl("/user/home")
+                .defaultSuccessUrl("/donate")
                 .and().logout().logoutSuccessUrl("/");
     }
 

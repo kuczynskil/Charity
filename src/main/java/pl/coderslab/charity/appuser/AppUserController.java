@@ -1,4 +1,4 @@
-package pl.coderslab.charity.AppUser;
+package pl.coderslab.charity.appuser;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import pl.coderslab.charity.Email.EmailService;
+import pl.coderslab.charity.donation.DonationRepository;
+import pl.coderslab.charity.email.EmailService;
+import pl.coderslab.charity.organization.OrganizationRepository;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -20,12 +22,19 @@ import java.util.UUID;
 public class AppUserController {
 
     private final AppUserRepository appUserRepository;
+    private final DonationRepository donationRepository;
+    private final OrganizationRepository organizationRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private static final String APP_USER = "appuser";
+    private static final String REDIRECT_INDEX = "redirect:/";
+    private static final String REGISTER_VIEW = "register";
 
-    public AppUserController(AppUserRepository appUserRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
+    public AppUserController(AppUserRepository appUserRepository, DonationRepository donationRepository, OrganizationRepository organizationRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
         this.appUserRepository = appUserRepository;
+        this.donationRepository = donationRepository;
+        this.organizationRepository = organizationRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
@@ -38,22 +47,21 @@ public class AppUserController {
 
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("appuser", new AppUser());
-        return "register";
+        model.addAttribute(APP_USER, new AppUser());
+        return REGISTER_VIEW;
     }
 
     @PostMapping("/register")
-    public String registerPerform(@Valid AppUser appUser, BindingResult result, Model model,
+    public String registerPerform(@Valid @ModelAttribute(name = "appuser") AppUser appUser, BindingResult result,
+                                  Model model,
                                   @RequestParam String password2) throws MessagingException {
 
         if (result.hasErrors()) {
-            model.addAttribute("appuser", appUser);
-            return "register";
+            return REGISTER_VIEW;
         }
         if (!appUser.getPassword().equals(password2)) {
-            model.addAttribute("appuser", appUser);
-            model.addAttribute("diffpasswordsMessage", "Hasła są różne");
-            return "register";
+            result.addError(new FieldError(APP_USER, "password", "Hasła są różne"));
+            return REGISTER_VIEW;
         }
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         appUser.setRoles(new HashSet<>(Collections.singletonList(roleRepository.findByName("ROLE_USER"))));
@@ -62,20 +70,20 @@ public class AppUserController {
         appUser.setVerificationTokenExpiryDate(calculateTokenExpiryDate(24 * 60));
         emailService.sendEmailToActivateNewAccount(appUser.getEmail(), appUser.getVerificationToken());
         appUserRepository.save(appUser);
-        return "redirect:/";
+        return REDIRECT_INDEX;
     }
 
     @GetMapping("/verify")
     public String verifyAppUser(@RequestParam String token) {
         AppUser appUser = appUserRepository.findByVerificationToken(token);
         if (appUser == null || appUser.isEnabled()) {
-            return "redirect:/";
+            return REDIRECT_INDEX;
         } else if (appUser.getVerificationTokenExpiryDate().before(new Timestamp(System.currentTimeMillis()))) {
             return "form-confirmation";
         }
         appUser.setEnabled(true);
         appUserRepository.save(appUser);
-        return "redirect:/";
+        return REDIRECT_INDEX;
     }
 
     private Timestamp calculateTokenExpiryDate(int expiryTimeInMinutes) {
@@ -100,7 +108,7 @@ public class AppUserController {
         appUser.setChangePasswordTokenExpiryDate(calculateTokenExpiryDate(3 * 60));
         emailService.sendEmailToChangeForgottenPassword(appUser.getEmail(), appUser.getChangePasswordToken());
         appUserRepository.save(appUser);
-        return "redirect:/";
+        return REDIRECT_INDEX;
     }
 
     @GetMapping("/resetPassword")
@@ -111,7 +119,7 @@ public class AppUserController {
         } else if (appUser.getChangePasswordTokenExpiryDate().before(new Timestamp(System.currentTimeMillis()))) {
             return "form-confirmation";
         }
-        model.addAttribute("appuser", appUser);
+        model.addAttribute(APP_USER, appUser);
         return "reset-password-form";
     }
 
@@ -119,9 +127,9 @@ public class AppUserController {
     public String settingNewPassword(@Valid AppUser appUser, Model model, BindingResult result,
                                      @RequestParam String password2) {
         if (result.hasErrors() || !appUser.getPassword().equals(password2)) {
-            model.addAttribute("appuser", appUser);
+            model.addAttribute(APP_USER, appUser);
             model.addAttribute("diffpasswordsMessage", "Hasła są różne");
-            return "register";
+            return REGISTER_VIEW;
         }
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         appUserRepository.save(appUser);
