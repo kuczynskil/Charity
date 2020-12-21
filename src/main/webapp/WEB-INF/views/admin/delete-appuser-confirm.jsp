@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
@@ -128,47 +129,27 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong class="card-title">Users</strong>
+                            <strong class="card-title">Do you wish to delete ${appuser.name} (${appuser.email})
+                                ?</strong>
                         </div>
                         <div class="card-body">
-                            <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Enabled</th>
-                                    <th>Role</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${users}" var="appuser">
-                                    <tr>
-                                        <td>${appuser.id}</td>
-                                        <td>${appuser.name}</td>
-                                        <td>${appuser.email}</td>
-                                        <td>${appuser.enabled}</td>
-                                        <td>
-                                            <c:forEach items="${appuser.roles}" var="role">
-                                                ${role.name}
-                                            </c:forEach>
-                                        </td>
-                                        <td>
-                                            <a href="/admino/appusers/edit/${appuser.id}"><i class="fa fa-edit"></i></a>
-                                            <a href="/admino/appusers/delete/${appuser.id}"><i
-                                                    class="fa fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
+                            <a href="/admino/appusers/deletePerform/${appuser.id}">
+                                <button
+                                        class="btn btn-primary btn-sm">Yes
+                                </button>
+                            </a>
+                            <a href="/admino/appusers/delete/cancel">
+                                <button
+                                        class="btn btn-primary btn-sm">No
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> <!-- .content -->
+    </div>
+</div> <!-- .content -->
 </div><!-- /#right-panel -->
 
 <!-- Right Panel -->

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
@@ -138,29 +139,52 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Enabled</th>
-                                    <th>Role</th>
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${users}" var="appuser">
-                                    <tr>
-                                        <td>${appuser.id}</td>
-                                        <td>${appuser.name}</td>
-                                        <td>${appuser.email}</td>
-                                        <td>${appuser.enabled}</td>
+                                <tr>
+                                    <form:form action="/admino/appusers/edit/${appuser.id}"
+                                               modelAttribute="appuser"
+                                               method="post">
+                                        <td></td>
                                         <td>
-                                            <c:forEach items="${appuser.roles}" var="role">
-                                                ${role.name}
-                                            </c:forEach>
+                                            <div class="col-12 col-md-9">
+                                                <form:input path="name"
+                                                            name="text-input"
+                                                            placeholder="Name"
+                                                            class="form-control"/>
+                                            </div>
                                         </td>
                                         <td>
-                                            <a href="/admino/appusers/edit/${appuser.id}"><i class="fa fa-edit"></i></a>
-                                            <a href="/admino/appusers/delete/${appuser.id}"><i
-                                                    class="fa fa-trash"></i></a>
+                                            <div class="col-12 col-md-9">
+                                                <form:input path="email"
+                                                            name="text-input"
+                                                            placeholder="Email"
+                                                            class="form-control"/>
+                                            </div>
                                         </td>
-                                    </tr>
-                                </c:forEach>
+                                        <td>
+                                            <div class="col-12 col-md-9">
+                                                <form:select path="enabled"  class="form-control">
+                                                    <form:option value="true" label="true"/>
+                                                    <form:option value="false" label="false"/>
+                                                </form:select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <i class="fa fa-plus-circle"></i>
+                                            </button>
+                                        </td>
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <form:hidden path="password" value="${appuser.password}"/>
+                                        <form:hidden path="verificationToken" value="${appuser.verificationToken}"/>
+                                        <form:hidden path="verificationTokenExpiryDate" value="${appuser.verificationTokenExpiryDate}"/>
+                                        <form:hidden path="changePasswordToken" value="${appuser.changePasswordToken}"/>
+                                        <form:hidden path="changePasswordTokenExpiryDate" value="${appuser.changePasswordTokenExpiryDate}"/>
+                                    </form:form>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>

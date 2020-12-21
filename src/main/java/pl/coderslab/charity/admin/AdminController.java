@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import pl.coderslab.charity.appuser.AppUser;
 import pl.coderslab.charity.appuser.AppUserRepository;
 import pl.coderslab.charity.donation.DonationRepository;
 import pl.coderslab.charity.organization.Organization;
@@ -15,7 +16,8 @@ public class AdminController {
     private final AppUserRepository appUserRepository;
     private final OrganizationRepository organizationRepository;
     private final DonationRepository donationRepository;
-    private final String REDIRECT_ORGANIZATIONS = "redirect:/admino/organizations";
+    private static final String REDIRECT_ORGANIZATIONS = "redirect:/admino/organizations";
+    private static final String REDIRECT_APP_USERS = "redirect:/admino/appusers";
 
     public AdminController(AppUserRepository appUserRepository, OrganizationRepository organizationRepository,
                            DonationRepository donationRepository) {
@@ -24,10 +26,41 @@ public class AdminController {
         this.donationRepository = donationRepository;
     }
 
-    @GetMapping("/admino")
+    @GetMapping("/admino/appusers")
     public String adminDashboard(Model model) {
         model.addAttribute("users", appUserRepository.findAll());
         return "admin/appusers-table";
+    }
+
+    @GetMapping("/admino/appusers/edit/{id}")
+    public String editAppUser(@PathVariable long id, Model model) {
+        model.addAttribute("appuser", appUserRepository.findById(id).get());
+        return "admin/edit-appuser";
+    }
+
+    @PostMapping("/admino/appusers/edit/{id}")
+    public String editAppUserPerform(@PathVariable long id, AppUser appUser) {
+        appUser.setRoles(appUserRepository.findById(id).get().getRoles());
+        appUserRepository.save(appUser);
+        return REDIRECT_APP_USERS;
+    }
+
+    @GetMapping("/admino/appusers/delete/{id}")
+    public String deleteAppUser(@PathVariable long id, Model model) {
+        model.addAttribute("appuser", appUserRepository.findById(id).get());
+        return "admin/delete-appuser-confirm";
+    }
+
+    @GetMapping("/admino/appusers/deletePerform/{id}")
+    public String deleteAppUserPerform(@PathVariable long id) {
+        appUserRepository.deleteAppUserRoles(id);
+        appUserRepository.delete(appUserRepository.findById(id).get());
+        return REDIRECT_APP_USERS;
+    }
+
+    @GetMapping("/admino/appusers/delete/cancel")
+    public String cancelDeleteAppUserOperation() {
+        return REDIRECT_APP_USERS;
     }
 
     @GetMapping("/admino/donations")
