@@ -132,6 +132,7 @@
                             <strong class="card-title">Admins</strong>
                         </div>
                         <div class="card-body">
+                            ${cantDeleteYourselfMessage}
                             <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                 <thead>
                                 <tr>
@@ -193,8 +194,8 @@
                                             </c:forEach>
                                         </td>
                                         <td>
-                                            <a href="/admino/admins/edit/${admin.id}"><i class="fa fa-edit"></i></a>
-                                            <a href="/admino/admins/delete/${admin.id}"><i
+                                            <a href="/admin/appusers/edit/${admin.id}"><i class="fa fa-edit"></i></a>
+                                            <a href="/admin/appusers/delete/${admin.id}"><i
                                                     class="fa fa-trash"></i></a>
                                         </td>
                                     </tr>

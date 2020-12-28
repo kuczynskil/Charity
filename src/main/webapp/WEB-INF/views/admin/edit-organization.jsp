@@ -143,7 +143,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <form:form action="/admino/organizations/edit/${organization.id}"
+                                    <form:form action="/admin/organizations/edit/${organization.id}"
                                                modelAttribute="organization"
                                                method="post">
                                         <td></td>

@@ -129,8 +129,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong class="card-title">Do you wish to delete ${appuser.name} (${appuser.email})
-                                ?</strong>
+                            <strong class="card-title">Do you wish to delete ${appuser.name} (${appuser.email})?</strong>
                         </div>
                         <div class="card-body">
                             <a href="/admino/appusers/deletePerform/${appuser.id}">
@@ -138,7 +137,7 @@
                                         class="btn btn-primary btn-sm">Yes
                                 </button>
                             </a>
-                            <a href="/admino/appusers/delete/cancel">
+                            <a href="/admin/appusers/delete/cancel">
                                 <button
                                         class="btn btn-primary btn-sm">No
                                 </button>

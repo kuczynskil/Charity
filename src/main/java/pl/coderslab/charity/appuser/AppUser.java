@@ -46,4 +46,15 @@ public class AppUser {
     public AppUser() {
         this.setEnabled(false);
     }
+
+    public boolean isThisAppUserAnAdmin() {
+        boolean isAdmin = false;
+        for (Role role : this.getRoles()) {
+            if (role.getName().equals("ROLE_ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        return isAdmin;
+    }
 }

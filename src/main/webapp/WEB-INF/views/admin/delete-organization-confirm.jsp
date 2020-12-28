@@ -132,12 +132,12 @@
                             <strong class="card-title">Do you wish to delete charity "${organization.name}"?</strong>
                         </div>
                         <div class="card-body">
-                            <a href="/admino/organization/deletePerform/${organization.id}">
+                            <a href="/admin/organization/deletePerform/${organization.id}">
                                 <button
                                         class="btn btn-primary btn-sm">Yes
                                 </button>
                             </a>
-                            <a href="/admino/organization/delete/cancel">
+                            <a href="/admin/organization/delete/cancel">
                                 <button
                                         class="btn btn-primary btn-sm">No
                                 </button>

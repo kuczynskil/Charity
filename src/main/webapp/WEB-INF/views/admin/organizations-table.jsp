@@ -143,7 +143,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <form:form action="/admino/organizations/add" modelAttribute="organization"
+                                    <form:form action="/admin/organizations/add" modelAttribute="organization"
                                                method="post">
                                         <td></td>
                                         <td>
@@ -176,9 +176,9 @@
                                         <td>"${organization.name}"</td>
                                         <td>${organization.description}</td>
                                         <td>
-                                            <a href="/admino/organizations/edit/${organization.id}"><i
+                                            <a href="/admin/organizations/edit/${organization.id}"><i
                                                     class="fa fa-edit"></i></a>
-                                            <a href="/admino/organization/delete/${organization.id}"><i
+                                            <a href="/admin/organization/delete/${organization.id}"><i
                                                     class="fa fa-trash"></i></a>
                                         </td>
                                     </tr>

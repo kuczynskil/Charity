@@ -144,7 +144,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <form:form action="/admino/appusers/edit/${appuser.id}"
+                                    <form:form action="/admin/appusers/edit/${appuser.id}"
                                                modelAttribute="appuser"
                                                method="post">
                                         <td></td>
