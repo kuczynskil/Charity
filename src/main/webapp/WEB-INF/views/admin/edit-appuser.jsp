@@ -178,11 +178,6 @@
                                             </button>
                                         </td>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <form:hidden path="password" value="${appuser.password}"/>
-                                        <form:hidden path="verificationToken" value="${appuser.verificationToken}"/>
-                                        <form:hidden path="verificationTokenExpiryDate" value="${appuser.verificationTokenExpiryDate}"/>
-                                        <form:hidden path="changePasswordToken" value="${appuser.changePasswordToken}"/>
-                                        <form:hidden path="changePasswordTokenExpiryDate" value="${appuser.changePasswordTokenExpiryDate}"/>
                                     </form:form>
                                 </tr>
                                 </tbody>

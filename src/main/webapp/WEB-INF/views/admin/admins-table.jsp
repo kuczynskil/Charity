@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
@@ -143,6 +144,43 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <tr>
+                                    <form:form action="/admino/admins/add" modelAttribute="admin"
+                                               method="post">
+                                        <td></td>
+                                        <td>
+                                            <div class="col-12 col-md-9">
+                                                <form:input path="name"
+                                                            name="text-input"
+                                                            placeholder="Name"
+                                                            class="form-control"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="col-12 col-md-9">
+                                                <form:input path="email" type="email"
+                                                            name="text-input"
+                                                            placeholder="Email"
+                                                            class="form-control"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="col-12 col-md-9">
+                                                <form:password path="password"
+                                                            name="text-input"
+                                                            placeholder="Password"
+                                                            class="form-control"/>
+                                            </div>
+                                        </td>
+                                        <td>ROLE_ADMIN</td>
+                                        <td>
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <i class="fa fa-plus-circle"></i>
+                                            </button>
+                                        </td>
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                    </form:form>
+                                </tr>
                                 <c:forEach items="${admins}" var="admin">
                                     <tr>
                                         <td>${admin.id}</td>
@@ -155,8 +193,9 @@
                                             </c:forEach>
                                         </td>
                                         <td>
-                                            <a href=""><i class="fa fa-edit"></i></a>
-                                            <a href=""><i class="fa fa-trash"></i></a>
+                                            <a href="/admino/admins/edit/${admin.id}"><i class="fa fa-edit"></i></a>
+                                            <a href="/admino/admins/delete/${admin.id}"><i
+                                                    class="fa fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 </c:forEach>
