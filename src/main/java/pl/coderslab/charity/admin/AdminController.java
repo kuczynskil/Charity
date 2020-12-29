@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.coderslab.charity.appuser.AppUser;
 import pl.coderslab.charity.appuser.AppUserRepository;
 import pl.coderslab.charity.appuser.CurrentUser;
@@ -69,12 +70,12 @@ public class AdminController {
     }
 
     @GetMapping("/admin/appusers/delete/{id}")
-    public String deleteAppUser(@PathVariable long id, Model model) {
+    public String deleteAppUser(@PathVariable long id, Model model, RedirectAttributes redirectAttributes) {
         AppUser loggedInAdmin = ((CurrentUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser();
         AppUser userToBeDeleted = appUserRepository.findById(id).get();
         if (loggedInAdmin.getEmail().equals(userToBeDeleted.getEmail())) {
-            model.addAttribute("cantDeleteYourselfMessage", "You can't delete yourself");
+            redirectAttributes.addFlashAttribute("cantDeleteYourselfMessage", "You can't delete yourself");
             return REDIRECT_ADMINS;
         }
         model.addAttribute("appuser", userToBeDeleted);

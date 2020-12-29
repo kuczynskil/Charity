@@ -50,8 +50,9 @@ public class HomeController {
     @PostMapping("/sendMessage")
     public String sendMessage(@RequestParam String name, @RequestParam String surname,
                               @RequestParam(required = false) String email,
-                              @RequestParam String message) throws MessagingException {
+                              @RequestParam String message, Model model) throws MessagingException {
         AppUser loggedInUser = loggedInUserOrNull();
+        model.addAttribute("appuser", loggedInUser);
         if (null == loggedInUser) {
             emailService.sendEmailFromContactForm(name, surname, email, message);
             return "message-sent-confirmation";

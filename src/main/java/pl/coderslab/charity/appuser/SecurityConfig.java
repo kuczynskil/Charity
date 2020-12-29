@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/donate/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and().formLogin().loginPage("/login")
-                .defaultSuccessUrl("/donate")
+                .defaultSuccessUrl("/default")
                 .and().logout().logoutSuccessUrl("/");
     }
 
