@@ -28,8 +28,8 @@ public class EmailService {
     public void sendEmailToActivateNewAccount(String email, String token) throws MessagingException {
         MimeMessage mailMessage = mailMessageConfiguration(email, "Oddam w niechciane ręce - aktywacja konta",
                 "<p> Dziękujemy za rejestrację w serwisie \"Oddam w niechciane ręce\".</p>"
-        + "<p> Kliknij w poniższy link aby dokończyć rejestrację i zweryfikować swoje konto:</p>"
-        + "<a href ='http://localhost:8080/verify?token=" + token + "'>Weryfikacja</a>");
+                        + "<p> Kliknij w poniższy link aby dokończyć rejestrację i zweryfikować swoje konto:</p>"
+                        + "<a href ='http://localhost:8080/verify?token=" + token + "'>Weryfikacja</a>");
         javaMailSender.send(mailMessage);
     }
 
@@ -41,6 +41,7 @@ public class EmailService {
                         + donationDetails);
         javaMailSender.send(mailMessage);
     }
+
     public MimeMessage mailMessageConfiguration(String recipientsEmail, String subject, String text) throws MessagingException {
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mailMessage, "utf-8");
@@ -51,5 +52,9 @@ public class EmailService {
         return mailMessage;
     }
 
-
+    public void sendEmailFromContactForm(String name, String surname, String email, String text) throws MessagingException {
+        MimeMessage mailMessage = mailMessageConfiguration("learningjava.noreply@gmail.com",
+                "Wiadomość od użytkownika", name + " " + surname + " (" + email + ") napisał: <br><br>" + text);
+        javaMailSender.send(mailMessage);
+    }
 }
