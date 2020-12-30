@@ -23,7 +23,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <form:form action="/admino/admins/add" modelAttribute="admin"
+                                    <form:form action="/admin/admins/add" modelAttribute="admin"
                                                method="post">
                                         <td></td>
                                         <td>

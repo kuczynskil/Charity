@@ -76,7 +76,7 @@ public class AdminController {
         AppUser userToBeDeleted = appUserRepository.findById(id).get();
         if (loggedInAdmin.getEmail().equals(userToBeDeleted.getEmail())) {
             redirectAttributes.addFlashAttribute("cantDeleteYourselfMessage", "You can't delete yourself");
-            return REDIRECT_ADMINS;
+            return REDIRECT_APP_USERS;
         }
         model.addAttribute("appuser", userToBeDeleted);
         return "admin/delete-appuser-confirm";

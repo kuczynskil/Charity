@@ -1,11 +1,13 @@
 package pl.coderslab.charity.appuser;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.charity.donation.Donation;
 import pl.coderslab.charity.donation.DonationRepository;
 import pl.coderslab.charity.email.EmailService;
 import pl.coderslab.charity.organization.OrganizationRepository;
@@ -13,10 +15,7 @@ import pl.coderslab.charity.organization.OrganizationRepository;
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 public class AppUserController {
@@ -53,7 +52,6 @@ public class AppUserController {
 
     @PostMapping("/register")
     public String registerPerform(@Valid @ModelAttribute(name = "appuser") AppUser appUser, BindingResult result,
-                                  Model model,
                                   @RequestParam String password2) throws MessagingException {
 
         if (result.hasErrors()) {
@@ -134,5 +132,59 @@ public class AppUserController {
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         appUserRepository.save(appUser);
         return "redirect:/login";
+    }
+
+    @GetMapping("/user/profile")
+    public String editAppUsersProfileInfo(Model model) {
+        AppUser loggedInUser = ((CurrentUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUser();
+        model.addAttribute("loggedInAppUser", loggedInUser);
+        return "appuser-edit-profile";
+    }
+
+    @PostMapping("/user/profile")
+    public String editAppUsersProfileInfoPerform(@Valid @ModelAttribute(name = "loggedInAppUser") AppUser loggedInAppUser,
+                                                 BindingResult result, @RequestParam long id) {
+        if (result.hasErrors()) {
+            return "appuser-edit-profile";
+        }
+        AppUser databaseAppUser = appUserRepository.findById(id).get();
+        databaseAppUser.setName(loggedInAppUser.getName());
+        databaseAppUser.setEmail(loggedInAppUser.getEmail());
+        appUserRepository.save(databaseAppUser);
+        return "redirect:/user/home";
+    }
+
+    @GetMapping("/user/profile/changepassword")
+    public String appUserChangePassword(Model model) {
+        AppUser loggedInUser = ((CurrentUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUser();
+        model.addAttribute("loggedInAppUser", loggedInUser);
+        return "appuser-change-password";
+    }
+
+    @PostMapping("/user/profile/changepassword")
+    public String appUserChangePasswordPerform(@Valid @ModelAttribute(name = "loggedInAppUser") AppUser loggedInAppUser,
+                                               BindingResult result, @RequestParam long id, @RequestParam String password2) {
+        if(result.hasErrors()) {
+            return "appuser-change-password";
+        }
+        if (!loggedInAppUser.getPassword().equals(password2)) {
+            result.addError(new FieldError("loggedInAppUser", "password", "Hasła są różne"));
+            return "appuser-change-password";
+        }
+        AppUser databaseAppUser = appUserRepository.findById(id).get();
+        databaseAppUser.setPassword(passwordEncoder.encode(loggedInAppUser.getPassword()));
+        appUserRepository.save(databaseAppUser);
+        return "redirect:/user/home";
+    }
+
+    @GetMapping("/user/home")
+    public String AppUsersDonations(Model model) {
+        AppUser loggedInUser = ((CurrentUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUser();
+        List<Donation> appUsersDonations = donationRepository.findAllByAppUser(loggedInUser);
+        model.addAttribute("donations", appUsersDonations);
+        return "appuser-donations";
     }
 }
