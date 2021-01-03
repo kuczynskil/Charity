@@ -47,48 +47,41 @@
             <div class="slogan--steps">
                 <div class="slogan--steps-title">
                     <table class="responsive-table">
-                        <thead class="table-header" style="font-size: 32px;">
-                        <td>Id</td>
+                        <thead class="table-header" style="font-size: 20px;">
+                        <td>Kategorie przedmiotów</td>
                         <td>Fundacja</td>
+                        <td>Liczba przekazanych worków</td>
+                        <td>Adres odbioru darów</td>
                         <td>Data i czas odbioru</td>
-                        <td>Odebrane</td>
-                        <td>Szczegóły</td>
+                        <td>Informacja dla kuriera</td>
+                        <td>Nr telefonu</td>
                         </thead>
                         <tbody class="table-row">
-                        <c:forEach items="${donations}" var="donation" varStatus="indexNumber">
-                            <tr style="font-size: 24px">
-                                <td>
-                                    <c:out value="${indexNumber.index + 1}"/>
-                                </td>
-                                <td>"${donation.organization.name}"</td>
-                                <td>
-                                        ${donation.pickUpDate}
-                                        ${donation.pickUpTime}
-                                </td>
-                                <td>
-                                    <form action="/user/home" method="post" class="myForm center">
-                                        <input type="checkbox" id="pickedUp${donation.id}" name="pickedUp"
-                                               style="display: none"
-                                               onchange="this.form.submit()"
-                                               <c:if test="${donation.pickedUp}">checked</c:if>>
-                                        <label for="pickedUp${donation.id}" class="toggle"><span></span></label>
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <input type="hidden" name="id" value="${donation.id}"/>
-                                    </form>
-                                </td>
-                                <td>
-                                    <a href="/user/donation/${donation.id}">
-                                        <img src="${pageContext.request.contextPath}/images/info-solid.svg"
-                                             height="16" width="40 px"
-                                             alt="szczegóły"/>
-                                    </a>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <tr style="font-size: 16px">
+                            <td>
+                                <c:forEach items="${donation.categories}" var="category">
+                                    ${category.name}<br>
+                                </c:forEach>
+                            </td>
+                            <td>"${donation.organization.name}"</td>
+                            <td>${donation.quantity}</td>
+                            <td>
+                                ${donation.street}<br>
+                                ${donation.zipCode}
+                                ${donation.city}
+                            </td>
+                            <td>
+                                ${donation.pickUpDate}
+                                ${donation.pickUpTime}
+                            </td>
+                            <td>${donation.pickUpComment}</td>
+                            <td>${donation.telephoneNumber}</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+            <a href="/user/home" class="myButton" style="position: relative; top: 30px;">Wróć</a>
         </div>
     </div>
 </header>

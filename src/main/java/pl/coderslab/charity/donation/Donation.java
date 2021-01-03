@@ -32,6 +32,8 @@ public class Donation {
     private AppUser appUser;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate pickUpDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate createdOn;
 
     @PositiveOrZero
     private int quantity;
@@ -46,4 +48,5 @@ public class Donation {
     @NotBlank
     @NumberFormat
     private String telephoneNumber;
+    private boolean pickedUp;
 }

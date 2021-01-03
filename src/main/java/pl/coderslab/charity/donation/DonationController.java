@@ -14,6 +14,7 @@ import pl.coderslab.charity.organization.OrganizationRepository;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -62,6 +63,8 @@ public class DonationController {
     public String addDonation(Donation donation, Model model) throws MessagingException {
         donation.setAppUser(((CurrentUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser());
+        donation.setCreatedOn(LocalDate.now());
+        donation.setPickedUp(false);
         donationRepository.save(donation);
         StringBuilder sb = new StringBuilder();
         sb.append(donation.getQuantity() + " worki, w których znajdują się " + addCategoriesToString(donation));

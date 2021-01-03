@@ -166,7 +166,7 @@ public class AppUserController {
     @PostMapping("/user/profile/changepassword")
     public String appUserChangePasswordPerform(@Valid @ModelAttribute(name = "loggedInAppUser") AppUser loggedInAppUser,
                                                BindingResult result, @RequestParam long id, @RequestParam String password2) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return "appuser-change-password";
         }
         if (!loggedInAppUser.getPassword().equals(password2)) {
@@ -180,11 +180,29 @@ public class AppUserController {
     }
 
     @GetMapping("/user/home")
-    public String AppUsersDonations(Model model) {
+    public String appUsersDonations(Model model) {
         AppUser loggedInUser = ((CurrentUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser();
         List<Donation> appUsersDonations = donationRepository.findAllByAppUser(loggedInUser);
+        appUsersDonations.sort(Comparator.comparing(Donation::isPickedUp)
+                .thenComparing(Donation::getPickUpDate, Comparator.reverseOrder())
+                .thenComparing(Donation::getCreatedOn, Comparator.reverseOrder()));
         model.addAttribute("donations", appUsersDonations);
         return "appuser-donations";
+    }
+
+    @PostMapping("/user/home")
+    public String changeDonationsPickedUpStatus(@RequestParam(required = false) boolean pickedUp,
+                                                @RequestParam long id) {
+        Donation donation = donationRepository.findById(id).get();
+        donation.setPickedUp(pickedUp);
+        donationRepository.save(donation);
+        return "redirect:/user/home";
+    }
+
+    @GetMapping("/user/donation/{id}")
+    public String showDonationsDetails(@PathVariable long id, Model model) {
+        model.addAttribute("donation", donationRepository.findById(id).get());
+        return "appuser-donation-details";
     }
 }
