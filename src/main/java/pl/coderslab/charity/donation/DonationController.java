@@ -24,7 +24,7 @@ public class DonationController {
     private final OrganizationRepository organizationRepository;
     private final DonationRepository donationRepository;
     private final EmailService emailService;
-    private static final String APP_USER = "appuser";
+    private static final String APP_USER = "loggedInAppUser";
 
     public DonationController(CategoryRepository categoryRepository, OrganizationRepository organizationRepository, DonationRepository donationRepository, EmailService emailService) {
         this.categoryRepository = categoryRepository;
@@ -40,7 +40,7 @@ public class DonationController {
                 .getAuthentication().getPrincipal()).getUser());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("organizations", organizationRepository.findAll());
-        return "form";
+        return "donation-form";
     }
 
     @PostMapping("/donate")
@@ -51,11 +51,11 @@ public class DonationController {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("organizations", organizationRepository.findAll());
-            return "form";
+            return "donation-form";
         }
         StringBuilder sb = addCategoriesToString(donation);
         model.addAttribute("categoriesString", sb);
-        return "form-summary";
+        return "donation-form-summary";
     }
 
 
@@ -85,7 +85,7 @@ public class DonationController {
         emailService.sendEmailWithDonationDetails(donation.getAppUser().getEmail(), sb.toString());
         model.addAttribute(APP_USER, ((CurrentUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser());
-        return "form-confirmation";
+        return "donation-form-confirmation";
     }
 
     private StringBuilder addCategoriesToString(Donation donation) {

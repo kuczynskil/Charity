@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.coderslab.charity.donation.Donation;
 import pl.coderslab.charity.donation.DonationRepository;
 import pl.coderslab.charity.email.EmailService;
-import pl.coderslab.charity.organization.OrganizationRepository;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -22,7 +21,6 @@ public class AppUserController {
 
     private final AppUserRepository appUserRepository;
     private final DonationRepository donationRepository;
-    private final OrganizationRepository organizationRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final EmailService emailService;
@@ -30,10 +28,11 @@ public class AppUserController {
     private static final String REDIRECT_INDEX = "redirect:/";
     private static final String REGISTER_VIEW = "register";
 
-    public AppUserController(AppUserRepository appUserRepository, DonationRepository donationRepository, OrganizationRepository organizationRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
+    public AppUserController(AppUserRepository appUserRepository, DonationRepository donationRepository,
+                             RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder,
+                             EmailService emailService) {
         this.appUserRepository = appUserRepository;
         this.donationRepository = donationRepository;
-        this.organizationRepository = organizationRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
@@ -64,7 +63,6 @@ public class AppUserController {
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         appUser.setRoles(new HashSet<>(Collections.singletonList(roleRepository.findByName("ROLE_USER"))));
         appUser.setVerificationToken(UUID.randomUUID().toString());
-        //expiry date set to 24 hours
         appUser.setVerificationTokenExpiryDate(calculateTokenExpiryDate(24 * 60));
         emailService.sendEmailToActivateNewAccount(appUser.getEmail(), appUser.getVerificationToken());
         appUserRepository.save(appUser);
@@ -77,7 +75,7 @@ public class AppUserController {
         if (appUser == null || appUser.isEnabled()) {
             return REDIRECT_INDEX;
         } else if (appUser.getVerificationTokenExpiryDate().before(new Timestamp(System.currentTimeMillis()))) {
-            return "form-confirmation";
+            return "donation-form-confirmation";
         }
         appUser.setEnabled(true);
         appUserRepository.save(appUser);
@@ -115,7 +113,7 @@ public class AppUserController {
         if (appUser == null) {
             return "redirect:/login";
         } else if (appUser.getChangePasswordTokenExpiryDate().before(new Timestamp(System.currentTimeMillis()))) {
-            return "form-confirmation";
+            return "donation-form-confirmation";
         }
         model.addAttribute(APP_USER, appUser);
         return "reset-password-form";
@@ -136,10 +134,14 @@ public class AppUserController {
 
     @GetMapping("/user/profile")
     public String editAppUsersProfileInfo(Model model) {
+        addLoggedInUserToModel(model);
+        return "appuser-edit-profile";
+    }
+
+    private Model addLoggedInUserToModel(Model model) {
         AppUser loggedInUser = ((CurrentUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser();
-        model.addAttribute("loggedInAppUser", loggedInUser);
-        return "appuser-edit-profile";
+        return model.addAttribute("loggedInAppUser", loggedInUser);
     }
 
     @PostMapping("/user/profile")
@@ -157,9 +159,7 @@ public class AppUserController {
 
     @GetMapping("/user/profile/changepassword")
     public String appUserChangePassword(Model model) {
-        AppUser loggedInUser = ((CurrentUser) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal()).getUser();
-        model.addAttribute("loggedInAppUser", loggedInUser);
+        addLoggedInUserToModel(model);
         return "appuser-change-password";
     }
 
@@ -188,6 +188,7 @@ public class AppUserController {
                 .thenComparing(Donation::getPickUpDate, Comparator.reverseOrder())
                 .thenComparing(Donation::getCreatedOn, Comparator.reverseOrder()));
         model.addAttribute("donations", appUsersDonations);
+        model.addAttribute("loggedInAppUser", loggedInUser);
         return "appuser-donations";
     }
 
@@ -203,6 +204,7 @@ public class AppUserController {
     @GetMapping("/user/donation/{id}")
     public String showDonationsDetails(@PathVariable long id, Model model) {
         model.addAttribute("donation", donationRepository.findById(id).get());
+        addLoggedInUserToModel(model);
         return "appuser-donation-details";
     }
 }

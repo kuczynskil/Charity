@@ -30,7 +30,7 @@ public class HomeController {
     @GetMapping("")
     public String homepage(Model model) {
         AppUser loggedInUser = loggedInUserOrNull();
-        model.addAttribute("appuser", loggedInUser);
+        model.addAttribute("loggedInAppUser", loggedInUser);
         model.addAttribute("organizations", organizationRepository.findAll());
         model.addAttribute("sumOfBags", donationRepository.sumOfBags());
         model.addAttribute("numberOfDonations", donationRepository.numberOfDonations());
