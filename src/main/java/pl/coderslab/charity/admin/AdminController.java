@@ -1,5 +1,6 @@
 package pl.coderslab.charity.admin;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -16,8 +17,10 @@ import pl.coderslab.charity.donation.DonationRepository;
 import pl.coderslab.charity.organization.Organization;
 import pl.coderslab.charity.organization.OrganizationRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 @Controller
 public class AdminController {
@@ -41,7 +44,8 @@ public class AdminController {
 
     @GetMapping("/admin/appusers")
     public String adminDashboard(Model model) {
-        model.addAttribute("users", appUserRepository.findAll());
+        List<AppUser> appUsers = appUserRepository.findAllByRoles(roleRepository.findByName("ROLE_USER"));
+        model.addAttribute("users", appUsers);
         return "admin/appusers-table";
     }
 
@@ -62,13 +66,6 @@ public class AdminController {
         return redirectToAdminsOrAppUsersTable(isAdmin);
     }
 
-    private String redirectToAdminsOrAppUsersTable(boolean isAdmin) {
-        if (isAdmin) {
-            return REDIRECT_ADMINS;
-        }
-        return REDIRECT_APP_USERS;
-    }
-
     @GetMapping("/admin/appusers/delete/{id}")
     public String deleteAppUser(@PathVariable long id, Model model, RedirectAttributes redirectAttributes) {
         AppUser loggedInAdmin = ((CurrentUser) SecurityContextHolder.getContext()
@@ -76,7 +73,7 @@ public class AdminController {
         AppUser userToBeDeleted = appUserRepository.findById(id).get();
         if (loggedInAdmin.getEmail().equals(userToBeDeleted.getEmail())) {
             redirectAttributes.addFlashAttribute("cantDeleteYourselfMessage", "You can't delete yourself");
-            return REDIRECT_APP_USERS;
+            return REDIRECT_ADMINS;
         }
         model.addAttribute("appuser", userToBeDeleted);
         return "admin/delete-appuser-confirm";
@@ -90,11 +87,6 @@ public class AdminController {
         return redirectToAdminsOrAppUsersTable(isAdmin);
     }
 
-    @GetMapping("/admin/appusers/delete/cancel")
-    public String cancelDeleteAppUserOperation() {
-        return REDIRECT_APP_USERS;
-    }
-
     @GetMapping("/admin/donations")
     public String adminDonations(Model model) {
         model.addAttribute("donations", donationRepository.findAll());
@@ -103,7 +95,8 @@ public class AdminController {
 
     @GetMapping("/admin/admins")
     public String adminsList(Model model) {
-        model.addAttribute("admins", appUserRepository.findAdmins());
+        List<AppUser> admins = appUserRepository.findAllByRoles(roleRepository.findByName("ROLE_ADMIN"));
+        model.addAttribute("admins", admins);
         model.addAttribute("admin", new AppUser());
         return "admin/admins-table";
     }
@@ -120,11 +113,6 @@ public class AdminController {
     @GetMapping("/admin/admins/deletePerform/{id}")
     public String deleteAdminPerform(@PathVariable long id) {
         appUserRepository.delete(appUserRepository.findById(id).get());
-        return REDIRECT_ADMINS;
-    }
-
-    @GetMapping("/admin/admins/delete/cancel")
-    public String cancelDeleteAdminOperation() {
         return REDIRECT_ADMINS;
     }
 
@@ -153,20 +141,30 @@ public class AdminController {
         return REDIRECT_ORGANIZATIONS;
     }
 
-    @GetMapping("/admin/organization/delete/{id}")
+    @GetMapping("/admin/organizations/delete/{id}")
     public String deleteOrganization(@PathVariable long id, Model model) {
         model.addAttribute("organization", organizationRepository.findById(id).get());
         return "admin/delete-organization-confirm";
     }
 
-    @GetMapping("/admin/organization/deletePerform/{id}")
+    @GetMapping("/admin/organizations/deletePerform/{id}")
     public String deleteOrganizationPerform(@PathVariable long id) {
         organizationRepository.delete(organizationRepository.findById(id).get());
         return REDIRECT_ORGANIZATIONS;
     }
 
-    @GetMapping("/admin/organization/delete/cancel")
-    public String cancelDeleteOrganizationOperation() {
-        return REDIRECT_ORGANIZATIONS;
+    @GetMapping("/admin/delete/cancel")
+    public String cancelDelete(HttpServletRequest request) {
+        String deleteConfirmationUrl = request.getHeader("Referer");
+        int indexOfSlashCharInUrl = StringUtils.ordinalIndexOf(deleteConfirmationUrl, "/", 5);
+        String redirectUrl = deleteConfirmationUrl.substring(0, indexOfSlashCharInUrl);
+        return "redirect:" + redirectUrl;
+    }
+
+    private String redirectToAdminsOrAppUsersTable(boolean isAdmin) {
+        if (isAdmin) {
+            return REDIRECT_ADMINS;
+        }
+        return REDIRECT_APP_USERS;
     }
 }

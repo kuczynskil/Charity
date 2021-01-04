@@ -33,9 +33,10 @@
                                             </c:forEach>
                                         </td>
                                         <td>
-                                            <a href="/admin/appusers/edit/${appuser.id}"><i class="fa fa-edit"></i></a>
-                                            <a href="/admin/appusers/delete/${appuser.id}"><i
-                                                    class="fa fa-trash"></i></a>
+                                            <a href="/admin/appusers/edit/${appuser.id}">
+                                                <i class="fa fa-edit"></i></a>
+                                            <a href="/admin/appusers/delete/${appuser.id}">
+                                                <i class="fa fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 </c:forEach>

@@ -9,7 +9,9 @@ import pl.coderslab.charity.category.Category;
 import pl.coderslab.charity.organization.Organization;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -31,6 +33,8 @@ public class Donation {
     @ManyToOne
     private AppUser appUser;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @FutureOrPresent
+    @NotNull
     private LocalDate pickUpDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdOn;
@@ -43,6 +47,7 @@ public class Donation {
     private String city;
     @NotBlank
     private String zipCode;
+    @NotNull
     private LocalTime pickUpTime;
     private String pickUpComment;
     @NotBlank

@@ -42,6 +42,12 @@ public class EmailService {
         javaMailSender.send(mailMessage);
     }
 
+    public void sendEmailFromContactForm(String name, String surname, String email, String text) throws MessagingException {
+        MimeMessage mailMessage = mailMessageConfiguration("learningjava.noreply@gmail.com",
+                "Wiadomość od użytkownika", name + " " + surname + " (" + email + ") napisał: <br><br>" + text);
+        javaMailSender.send(mailMessage);
+    }
+
     public MimeMessage mailMessageConfiguration(String recipientsEmail, String subject, String text) throws MessagingException {
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mailMessage, "utf-8");
@@ -50,11 +56,5 @@ public class EmailService {
         helper.setSubject(subject);
         helper.setText(text, true);
         return mailMessage;
-    }
-
-    public void sendEmailFromContactForm(String name, String surname, String email, String text) throws MessagingException {
-        MimeMessage mailMessage = mailMessageConfiguration("learningjava.noreply@gmail.com",
-                "Wiadomość od użytkownika", name + " " + surname + " (" + email + ") napisał: <br><br>" + text);
-        javaMailSender.send(mailMessage);
     }
 }

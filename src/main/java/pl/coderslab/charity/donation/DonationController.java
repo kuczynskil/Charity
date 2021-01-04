@@ -66,6 +66,13 @@ public class DonationController {
         donation.setCreatedOn(LocalDate.now());
         donation.setPickedUp(false);
         donationRepository.save(donation);
+        sendEmailWithDonationDetails(donation);
+        model.addAttribute(APP_USER, ((CurrentUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUser());
+        return "donation-form-confirmation";
+    }
+
+    private void sendEmailWithDonationDetails(Donation donation) throws MessagingException {
         StringBuilder sb = new StringBuilder();
         sb.append(donation.getQuantity() + " worki, w których znajdują się " + addCategoriesToString(donation));
         sb.append(" Dla fundacji \"" + donation.getOrganization().getName() + "\".");
@@ -83,9 +90,6 @@ public class DonationController {
                 "   <li>" + donation.getPickUpComment() + "</li>\n" +
                 "</ul>");
         emailService.sendEmailWithDonationDetails(donation.getAppUser().getEmail(), sb.toString());
-        model.addAttribute(APP_USER, ((CurrentUser) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal()).getUser());
-        return "donation-form-confirmation";
     }
 
     private StringBuilder addCategoriesToString(Donation donation) {

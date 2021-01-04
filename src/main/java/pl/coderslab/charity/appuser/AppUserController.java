@@ -25,8 +25,12 @@ public class AppUserController {
     private final BCryptPasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private static final String APP_USER = "appuser";
+    private static final String LOGGED_IN_APP_USER = "loggedInAppUser";
+    private static final String DIFFERENT_PASSWORDS_MESSAGE = "Hasła są różne";
     private static final String REDIRECT_INDEX = "redirect:/";
+    private static final String REDIRECT_USER_HOME = "redirect:/user/home";
     private static final String REGISTER_VIEW = "register";
+    private static final String CHANGE_PASSWORD_VIEW = "appuser-change-password";
 
     public AppUserController(AppUserRepository appUserRepository, DonationRepository donationRepository,
                              RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder,
@@ -57,7 +61,13 @@ public class AppUserController {
             return REGISTER_VIEW;
         }
         if (!appUser.getPassword().equals(password2)) {
-            result.addError(new FieldError(APP_USER, "password", "Hasła są różne"));
+            result.addError(new FieldError(APP_USER, "password", DIFFERENT_PASSWORDS_MESSAGE));
+            return REGISTER_VIEW;
+        }
+        AppUser userFoundByEnteredEmail = appUserRepository.findByEmail(appUser.getEmail());
+        if (userFoundByEnteredEmail != null) {
+            result.addError(new FieldError(APP_USER, "email",
+                    "Konto o podanym adresie email już istnieje."));
             return REGISTER_VIEW;
         }
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
@@ -75,17 +85,11 @@ public class AppUserController {
         if (appUser == null || appUser.isEnabled()) {
             return REDIRECT_INDEX;
         } else if (appUser.getVerificationTokenExpiryDate().before(new Timestamp(System.currentTimeMillis()))) {
-            return "donation-form-confirmation";
+            return "verify-confirmation";
         }
         appUser.setEnabled(true);
         appUserRepository.save(appUser);
         return REDIRECT_INDEX;
-    }
-
-    private Timestamp calculateTokenExpiryDate(int expiryTimeInMinutes) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
-        return new Timestamp(calendar.getTime().getTime());
     }
 
     @GetMapping("/recoverPassword")
@@ -97,14 +101,14 @@ public class AppUserController {
     public String recoverPassPerform(@RequestParam String email, Model model) throws MessagingException {
         AppUser appUser = appUserRepository.findByEmail(email);
         if (appUser == null) {
-            model.addAttribute("message", "Nie istnieje konto o takim emailu. Spróbuj ponownie.");
+            model.addAttribute("message", "Nie istnieje konto o takim adresie email. Spróbuj ponownie.");
             return "forgot-password-form";
         }
         appUser.setChangePasswordToken(UUID.randomUUID().toString());
         appUser.setChangePasswordTokenExpiryDate(calculateTokenExpiryDate(3 * 60));
         emailService.sendEmailToChangeForgottenPassword(appUser.getEmail(), appUser.getChangePasswordToken());
         appUserRepository.save(appUser);
-        return REDIRECT_INDEX;
+        return "forgot-password-confirmation";
     }
 
     @GetMapping("/resetPassword")
@@ -124,7 +128,7 @@ public class AppUserController {
                                      @RequestParam String password2) {
         if (result.hasErrors() || !appUser.getPassword().equals(password2)) {
             model.addAttribute(APP_USER, appUser);
-            model.addAttribute("diffpasswordsMessage", "Hasła są różne");
+            model.addAttribute("diffpasswordsMessage", DIFFERENT_PASSWORDS_MESSAGE);
             return REGISTER_VIEW;
         }
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
@@ -138,12 +142,6 @@ public class AppUserController {
         return "appuser-edit-profile";
     }
 
-    private Model addLoggedInUserToModel(Model model) {
-        AppUser loggedInUser = ((CurrentUser) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal()).getUser();
-        return model.addAttribute("loggedInAppUser", loggedInUser);
-    }
-
     @PostMapping("/user/profile")
     public String editAppUsersProfileInfoPerform(@Valid @ModelAttribute(name = "loggedInAppUser") AppUser loggedInAppUser,
                                                  BindingResult result, @RequestParam long id) {
@@ -154,29 +152,29 @@ public class AppUserController {
         databaseAppUser.setName(loggedInAppUser.getName());
         databaseAppUser.setEmail(loggedInAppUser.getEmail());
         appUserRepository.save(databaseAppUser);
-        return "redirect:/user/home";
+        return REDIRECT_USER_HOME;
     }
 
     @GetMapping("/user/profile/changepassword")
     public String appUserChangePassword(Model model) {
         addLoggedInUserToModel(model);
-        return "appuser-change-password";
+        return CHANGE_PASSWORD_VIEW;
     }
 
     @PostMapping("/user/profile/changepassword")
     public String appUserChangePasswordPerform(@Valid @ModelAttribute(name = "loggedInAppUser") AppUser loggedInAppUser,
                                                BindingResult result, @RequestParam long id, @RequestParam String password2) {
         if (result.hasErrors()) {
-            return "appuser-change-password";
+            return CHANGE_PASSWORD_VIEW;
         }
         if (!loggedInAppUser.getPassword().equals(password2)) {
-            result.addError(new FieldError("loggedInAppUser", "password", "Hasła są różne"));
-            return "appuser-change-password";
+            result.addError(new FieldError(LOGGED_IN_APP_USER, "password", DIFFERENT_PASSWORDS_MESSAGE));
+            return CHANGE_PASSWORD_VIEW;
         }
         AppUser databaseAppUser = appUserRepository.findById(id).get();
         databaseAppUser.setPassword(passwordEncoder.encode(loggedInAppUser.getPassword()));
         appUserRepository.save(databaseAppUser);
-        return "redirect:/user/home";
+        return REDIRECT_USER_HOME;
     }
 
     @GetMapping("/user/home")
@@ -188,7 +186,7 @@ public class AppUserController {
                 .thenComparing(Donation::getPickUpDate, Comparator.reverseOrder())
                 .thenComparing(Donation::getCreatedOn, Comparator.reverseOrder()));
         model.addAttribute("donations", appUsersDonations);
-        model.addAttribute("loggedInAppUser", loggedInUser);
+        model.addAttribute(LOGGED_IN_APP_USER, loggedInUser);
         return "appuser-donations";
     }
 
@@ -198,7 +196,7 @@ public class AppUserController {
         Donation donation = donationRepository.findById(id).get();
         donation.setPickedUp(pickedUp);
         donationRepository.save(donation);
-        return "redirect:/user/home";
+        return REDIRECT_USER_HOME;
     }
 
     @GetMapping("/user/donation/{id}")
@@ -206,5 +204,17 @@ public class AppUserController {
         model.addAttribute("donation", donationRepository.findById(id).get());
         addLoggedInUserToModel(model);
         return "appuser-donation-details";
+    }
+
+    private Timestamp calculateTokenExpiryDate(int expiryTimeInMinutes) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
+        return new Timestamp(calendar.getTime().getTime());
+    }
+
+    private Model addLoggedInUserToModel(Model model) {
+        AppUser loggedInUser = ((CurrentUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUser();
+        return model.addAttribute(LOGGED_IN_APP_USER, loggedInUser);
     }
 }

@@ -37,16 +37,6 @@ public class HomeController {
         return "index";
     }
 
-    public AppUser loggedInUserOrNull() {
-        if (SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal().equals("anonymousUser")) {
-            return null;
-        }
-        AppUser loggedInUser = ((CurrentUser) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal()).getUser();
-        return loggedInUser;
-    }
-
     @PostMapping("/sendMessage")
     public String sendMessage(@RequestParam String name, @RequestParam String surname,
                               @RequestParam(required = false) String email,
@@ -59,6 +49,16 @@ public class HomeController {
         }
         emailService.sendEmailFromContactForm(name, surname, loggedInUser.getEmail(), message);
         return "message-sent-confirmation";
+    }
+
+    public AppUser loggedInUserOrNull() {
+        if (SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal().equals("anonymousUser")) {
+            return null;
+        }
+        AppUser loggedInUser = ((CurrentUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUser();
+        return loggedInUser;
     }
 }
 

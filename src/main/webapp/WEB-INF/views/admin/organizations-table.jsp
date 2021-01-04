@@ -53,10 +53,10 @@
                                         <td>"${organization.name}"</td>
                                         <td>${organization.description}</td>
                                         <td>
-                                            <a href="/admin/organizations/edit/${organization.id}"><i
-                                                    class="fa fa-edit"></i></a>
-                                            <a href="/admin/organization/delete/${organization.id}"><i
-                                                    class="fa fa-trash"></i></a>
+                                            <a href="/admin/organizations/edit/${organization.id}">
+                                                <i class="fa fa-edit"></i></a>
+                                            <a href="/admin/organizations/delete/${organization.id}">
+                                                <i class="fa fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 </c:forEach>

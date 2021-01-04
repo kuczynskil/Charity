@@ -14,7 +14,7 @@
                                         class="btn btn-primary btn-sm">Yes
                                 </button>
                             </a>
-                            <a href="/admin/appusers/delete/cancel">
+                            <a href="/admin/delete/cancel">
                                 <button
                                         class="btn btn-primary btn-sm">No
                                 </button>
