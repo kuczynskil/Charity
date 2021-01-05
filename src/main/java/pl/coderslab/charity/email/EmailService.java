@@ -21,7 +21,7 @@ public class EmailService {
                 "<p style = \"font-size: 20px\"> Dzień dobry, </p>" +
                         "<p> w celu zresetowania i ustawienia nowego hasła w serwisie \"Oddam w niechciane " +
                         "ręce\" proszę nacisnąć w poniższy link:</p>"
-                        + "<a href ='http://localhost:8080/resetPassword?token=" + token + "'>Reset hasła</a>");
+                        + "<a href ='http://charity1.herokuapp.com/resetPassword?token=" + token + "'>Reset hasła</a>");
         javaMailSender.send(mailMessage);
     }
 
@@ -29,7 +29,7 @@ public class EmailService {
         MimeMessage mailMessage = mailMessageConfiguration(email, "Oddam w niechciane ręce - aktywacja konta",
                 "<p> Dziękujemy za rejestrację w serwisie \"Oddam w niechciane ręce\".</p>"
                         + "<p> Kliknij w poniższy link aby dokończyć rejestrację i zweryfikować swoje konto:</p>"
-                        + "<a href ='http://localhost:8080/verify?token=" + token + "'>Weryfikacja</a>");
+                        + "<a href ='http://charity1.herokuapp.com/verify?token=" + token + "'>Weryfikacja</a>");
         javaMailSender.send(mailMessage);
     }
 

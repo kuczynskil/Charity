@@ -85,11 +85,11 @@ public class AppUserController {
         if (appUser == null || appUser.isEnabled()) {
             return REDIRECT_INDEX;
         } else if (appUser.getVerificationTokenExpiryDate().before(new Timestamp(System.currentTimeMillis()))) {
-            return "verify-confirmation";
+            return "verify-token-expired";
         }
         appUser.setEnabled(true);
         appUserRepository.save(appUser);
-        return REDIRECT_INDEX;
+        return "verify-confirmation";
     }
 
     @GetMapping("/recoverPassword")
