@@ -16,6 +16,8 @@
 <div class="slogan container container--90">
     <div class="slogan--item">
         <h1>
+            Użytkownik: test@gmail.com, Test1234<br>
+            Admin: admin@admin.com, Admin1234<br><br><br>
             Zacznij pomagać!<br/>
             Oddaj niechciane rzeczy w zaufane ręce
         </h1>
