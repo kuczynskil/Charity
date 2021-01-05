@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-<header class="header">
+<header class="header--form-page">
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
 
     <div class="slogan container container--90">

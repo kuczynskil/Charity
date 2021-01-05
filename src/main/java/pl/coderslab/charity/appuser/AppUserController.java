@@ -190,6 +190,8 @@ public class AppUserController {
         return "appuser-donations";
     }
 
+    // (required = false) allows boolean pickedUp
+    // to have the 'false' value and be sent by form
     @PostMapping("/user/home")
     public String changeDonationsPickedUpStatus(@RequestParam(required = false) boolean pickedUp,
                                                 @RequestParam long id) {

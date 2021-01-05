@@ -4,6 +4,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import pl.coderslab.charity.appuser.CurrentUser;
@@ -38,9 +39,7 @@ public class DonationController {
         model.addAttribute("donation", new Donation());
         model.addAttribute(APP_USER, ((CurrentUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser());
-        model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("organizations", organizationRepository.findAll());
-        return "donation-form";
+        return redirectToDonationForm(model);
     }
 
     @PostMapping("/donate")
@@ -49,9 +48,12 @@ public class DonationController {
         model.addAttribute(APP_USER, ((CurrentUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser());
         if (result.hasErrors()) {
-            model.addAttribute("categories", categoryRepository.findAll());
-            model.addAttribute("organizations", organizationRepository.findAll());
-            return "donation-form";
+            return redirectToDonationForm(model);
+        }
+        if (donation.getPickUpDate().isBefore(LocalDate.now())) {
+            result.addError(new FieldError("donation", "pickUpDate",
+                    "Data nie może być w przeszłości."));
+            return redirectToDonationForm(model);
         }
         StringBuilder sb = addCategoriesToString(donation);
         model.addAttribute("categoriesString", sb);
@@ -105,5 +107,11 @@ public class DonationController {
                     .append(categoryList.get(categoryList.size() - 1).getName()).append(".");
         }
         return sb;
+    }
+
+    private String redirectToDonationForm(Model model) {
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("organizations", organizationRepository.findAll());
+        return "donation-form";
     }
 }

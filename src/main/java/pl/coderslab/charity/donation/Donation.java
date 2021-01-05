@@ -33,7 +33,6 @@ public class Donation {
     @ManyToOne
     private AppUser appUser;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @FutureOrPresent
     @NotNull
     private LocalDate pickUpDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

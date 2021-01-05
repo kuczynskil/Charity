@@ -15,7 +15,6 @@
         </form>
     </div>
     <div class="bottom-line">
-        <span class="bottom-line--copy">Copyright &copy; 2018</span>
         <div class="bottom-line--icons">
             <a href="#" class="btn btn--small"><img src="${pageContext.request.contextPath}/images/icon-facebook.svg"
                                                     alt="facebook"/></a>
