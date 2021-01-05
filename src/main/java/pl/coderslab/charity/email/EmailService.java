@@ -17,7 +17,7 @@ public class EmailService {
     }
 
     public void sendEmailToChangeForgottenPassword(String email, String token) throws MessagingException {
-        MimeMessage mailMessage = mailMessageConfiguration(email, "Oddam w niechciane ręce - reset hasła",
+        MimeMessage mailMessage = mailMessageConfiguration(email, "Oddam w zaufane ręce - reset hasła",
                 "<p style = \"font-size: 20px\"> Dzień dobry, </p>" +
                         "<p> w celu zresetowania i ustawienia nowego hasła w serwisie \"Oddam w niechciane " +
                         "ręce\" proszę nacisnąć w poniższy link:</p>"
@@ -26,7 +26,7 @@ public class EmailService {
     }
 
     public void sendEmailToActivateNewAccount(String email, String token) throws MessagingException {
-        MimeMessage mailMessage = mailMessageConfiguration(email, "Oddam w niechciane ręce - aktywacja konta",
+        MimeMessage mailMessage = mailMessageConfiguration(email, "Oddam w zaufane ręce - aktywacja konta",
                 "<p> Dziękujemy za rejestrację w serwisie \"Oddam w niechciane ręce\".</p>"
                         + "<p> Kliknij w poniższy link aby dokończyć rejestrację i zweryfikować swoje konto:</p>"
                         + "<a href ='http://charity1.herokuapp.com/verify?token=" + token + "'>Weryfikacja</a>");
@@ -35,7 +35,7 @@ public class EmailService {
 
 
     public void sendEmailWithDonationDetails(String email, String donationDetails) throws MessagingException {
-        MimeMessage mailMessage = mailMessageConfiguration(email, "Oddam w niechciane ręce - Twoja darowizna",
+        MimeMessage mailMessage = mailMessageConfiguration(email, "Oddam w zaufane ręce - Twoja darowizna",
                 "<p> Bardzo dziękujemy za darowiznę. </p>"
                         + "<p> Szczegóły Twojej darowizny:</p>"
                         + donationDetails);
