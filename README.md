@@ -1,51 +1,27 @@
 # Charity
-Web application allowing users to donate unwanted items to charities.
-# Project Name
-> Here goes your awesome project description!
-
-## Table of contents
-* [General info](#general-info)
-* [Screenshots](#screenshots)
-* [Technologies](#technologies)
-* [Setup](#setup)
-* [Features](#features)
-* [Status](#status)
-* [Inspiration](#inspiration)
-* [Contact](#contact)
+This is a web application allowing users to donate items, which they no longer use or need, to charities.
 
 ## General info
-Add more general information about project. What the purpose of the project is? Motivation?
-
-## Screenshots
-![Example screenshot](./img/screenshot.png)
+This project simplifies the process of donating items to charities, since it allows user
+to determine the pick up information for the courier.
 
 ## Technologies
-* Tech 1 - version 1.0
-* Tech 2 - version 2.0
-* Tech 3 - version 3.0
+* Java - version 1.8
+* Spring Boot - version 2.4.0
+* Hibernate - version 5.4.4
 
-## Setup
-Describe how to install / setup your local environement / add link to demo version.
-
-## Code Examples
-Show examples of usage:
-`put-your-code-here`
+## Demo
+Demo version available at: https://www.charity1.herokuapp.com
 
 ## Features
-List of features ready and TODOs for future development
-* Awesome feature 1
-* Awesome feature 2
-* Awesome feature 3
-
-To-do list:
-* Wow improvement to be done 1
-* Wow improvement to be done 2
-
-## Status
-Project is: _in progress_, _finished_, _no longer continue_ and why?
-
-## Inspiration
-Add here credits. Project inspired by..., based on...
+* Registration and login
+* Donation form
+* Email service:
+..* sent to activate newly created account
+..* sent to reset a forgotten password
+..* sent to provide information about created donation
+..* used in contact form available as a page footer
+* Admin panel used to manage users, admins and charities
 
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
+Created by [@kuczynskil](https://www.github.com/kuczynskil) - feel free to contact me!
