@@ -11,16 +11,16 @@ to determine the pick up information for the courier.
 * Hibernate - version 5.4.4
 
 ## Demo
-Demo version available at: https://www.charity1.herokuapp.com
+Demo version available at: https://charity1.herokuapp.com
 
 ## Features
 * Registration and login
 * Donation form
 * Email service:
-..* sent to activate newly created account
-..* sent to reset a forgotten password
-..* sent to provide information about created donation
-..* used in contact form available as a page footer
+  * sent to activate newly created account
+  * sent to reset a forgotten password
+  * sent to provide information about created donation
+  * used in contact form available as a page footer
 * Admin panel used to manage users, admins and charities
 
 ## Contact
