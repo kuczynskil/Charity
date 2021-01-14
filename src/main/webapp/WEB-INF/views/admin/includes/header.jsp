@@ -13,24 +13,24 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Sufee Admin - HTML5 Admin Template</title>
+    <title>Admin panel</title>
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="apple-touch-icon" href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/apple-icon.png">
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/favicon.ico">
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/bootstrap/dist/css/bootstrap.min.css">
+          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/bootstrap/dist/css/bootstrap-purified.css">
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/font-awesome/css/font-awesome.min.css">
+          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/font-awesome/css/fontawesome-purified.css">
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/themify-icons/css/themify-icons.css">
+          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/themify-icons/css/themify-icons-purified.css">
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/flag-icon-css/css/flag-icon.min.css">
+          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/flag-icon-css/css/flag-icon-purified.css">
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/selectFX/css/cs-skin-elastic.css">
+          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/selectFX/css/cs-skin-elastic-purified.css">
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/jqvmap/dist/jqvmap.min.css">
+          href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/jqvmap/dist/jqvmap-purified.css">
 
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/assets/css/style.css">
