@@ -33,7 +33,7 @@
           href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/vendors/jqvmap/dist/jqvmap-purified.css">
 
 
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/assets/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/sufee-admin-dashboard-master/assets/css/style-purified.css">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
