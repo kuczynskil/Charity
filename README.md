@@ -13,6 +13,10 @@ to determine the pick up information for the courier.
 ## Demo
 Demo version available at: https://charity1.herokuapp.com
 
+## Screenshots
+![donation page](src/main/resources/static/images/donation.png)
+![admin panel](src/main/resources/static/images/admin_panel.png)
+
 ## Features
 * Registration and login
 * Donation form
